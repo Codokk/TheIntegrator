@@ -1,0 +1,8 @@
+{
+    "username": "TheIntegrator", //The Name of the Bot
+    "oauth": "oauth:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", // Log into twitch as your bot, then go to http://twitchapps.com/tmi
+    "ttv_channel": "Codokk", // Your Twitch Channel
+    "discord_chat_channel": "780844920294342676", // The ID of the discord channel to send and receive chat to
+    "token": "xxxxxxxxxx.xx.xxxx-xx-xxxxxxxx", // Discord Bot Token
+    "ttsid": "7eb611c7-5c6f-42b2-b127-58949b73754c" // The Text-To-Speech Custom Reward ID. You can get this by redeemin TTS while the bot is running and checking the console for the ID
+}

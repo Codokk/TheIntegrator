@@ -67,7 +67,7 @@ app.get("/events", async function(req, res) {
 })
 
 /* Set up the default file and open start the webserver */
-const index = fs.readFileSync('./index.html', 'utf8');
+const index = fs.readFileSync('./front_end/index.html', 'utf8');
 app.get('/', (req, res) => res.send(index));
 
 app.listen(3000, function() {
