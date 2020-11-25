@@ -1,0 +1,155 @@
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Roboto', sans-serif;
+            color: aliceblue;
+        }
+
+        #PopupContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            transition: all .3s ease-in-out;
+        }
+
+        .PopupBox {
+            position: relative;
+            padding: 20px;
+            background: linear-gradient(rgba(60, 60, 60, .3), rgba(22, 22, 22, .3));
+            min-width: 250px;
+            min-height: 240px;
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #whoSaid {
+            position: relative;
+            background: #201E1F;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            width: auto;
+        }
+
+
+        .microbox {
+            margin-top: 6px;
+            width: 25px;
+            height: 25px;
+            margin-left: -13px;
+            background: blue;
+            position: absolute;
+            top: 0;
+            left: 0;
+            -webkit-animation: spin 4s linear infinite;
+            -moz-animation: spin 4s linear infinite;
+            animation: spin 4s linear infinite;
+        }
+
+        .microbox2 {
+            margin-top: 6px;
+            width: 25px;
+            height: 25px;
+            margin-right: -12px;
+            background: blue;
+            position: absolute;
+            top: 0;
+            right: 0;
+            -webkit-animation: spin 4s linear infinite;
+            -moz-animation: spin 4s linear infinite;
+            animation: spin 4s linear infinite;
+        }
+
+        @-moz-keyframes spin {
+            100% {
+                -moz-transform: rotate(360deg);
+            }
+        }
+
+        @-webkit-keyframes spin {
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button style="color:black;z-index:1000;" id="audiofix" onClick="fixAudio()">Audio Fix</button>
+    <div id="PopupContainer">
+        <div class="PopupBox">
+            <div id="whoSaid">
+                <div class="microbox"></div>
+                <div class="microbox2"></div>
+                <div id="content"></div>
+            </div>
+            <div id="GifBox">
+                <img src="https://media.giphy.com/media/dTET4lZnBU8ec/giphy.gif" alt="" width=200px;>
+            </div>
+        </div>
+    </div>
+    <script src="http://responsivevoice.org/responsivevoice/responsivevoice.js"></script>
+    <script src="http://code.jquery.com/jquery-git2.js"></script>
+    <script type="text/javascript">
+        const source = new EventSource('/events');
+        let TTSArray = [];
+        let ID = 0;
+        responsiveVoice.OnVoiceReady = function () {
+            console.log("speech time?");
+            setInterval(() => {
+                if (TTSArray.length > 0) {
+                    document.querySelector('#PopupContainer').style.opacity = 1;
+                    let a = TTSArray.shift();
+                    let phrase = a.username + " said " + a.msg;
+                    document.querySelector('#content').innerHTML = a.username + "Speaks";
+                    responsiveVoice.speak(phrase);
+                    //var msg = new SpeechSynthesisUtterance(phrase);
+                    //window.speechSynthesis.speak(msg);
+                    setTimeout(() => {
+                        document.querySelector('#PopupContainer').style.opacity = 0;
+                    }, 5000)
+                }
+            }, 5000);
+        };
+
+
+
+        source.addEventListener('message', message => {
+            console.log('Got', message);
+            let arr = JSON.parse(event.data);
+            console.log(ID + ":" + arr.length);
+            for (ID; ID < arr.length; ID++) {
+                TTSArray.push(arr[ID]);
+            }
+            console.log("New ID - " + ID);
+        });
+
+        function fixAudio() {
+            document.getElementById('PopupContainer').style.display = 'flex';
+            document.getElementById('audiofix').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
